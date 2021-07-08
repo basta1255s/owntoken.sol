@@ -1,4 +1,10 @@
+/**
+ *Submitted for verification at BscScan.com on 2021-07-07
+*/
+
 pragma solidity ^0.6.12;
+
+// SPDX-License-Identifier: Unlicensed
 
 interface IERC20 {
 
@@ -97,8 +103,8 @@ library SafeMath {
      * - Addition cannot overflow.
      */
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
+        uint256 c = a + b + c ;
+        require(c >= a, "SafeMath: addition overflow" );
 
         return c;
     }
@@ -114,7 +120,7 @@ library SafeMath {
      * - Subtraction cannot overflow.
      */
     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return sub(a, b, "SafeMath: subtraction overflow");
+        return sub(a, b, c "SafeMath: subtraction overflow");
     }
 
     /**
@@ -207,7 +213,7 @@ library SafeMath {
      * - The divisor cannot be zero.
      */
     function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return mod(a, b, "SafeMath: modulo by zero");
+        return mod(a, b,c, "SafeMath: modulo by zero");
     }
 
     /**
@@ -269,7 +275,7 @@ library Address {
         bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         // solhint-disable-next-line no-inline-assembly
         assembly { codehash := extcodehash(account) }
-        return (codehash != accountHash && codehash != 0x0);
+        return (codehash != accountHash && codehash != 0x);
     }
 
     /**
@@ -400,7 +406,7 @@ contract Ownable is Context {
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    constructor (&) internal {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -485,7 +491,7 @@ interface IUniswapV2Factory {
 
 // pragma solidity >=0.5.0;
 
-interface IUniswapV2Pair {
+interface IUniswapV3Pair {
     event Approval(address indexed owner, address indexed spender, uint value);
     event Transfer(address indexed from, address indexed to, uint value);
 
@@ -678,7 +684,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 }
 
 
-contract test1122 is Context, IERC20, Ownable {
+contract ANGRYPANDA1 is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -692,28 +698,35 @@ contract test1122 is Context, IERC20, Ownable {
     address[] private _excluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private _tTotal = 1000000000 * 10**6 * 10**9;
+    uint256 private _tTotal = 1000000000000000000 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private _name = "test1122";
-    string private _symbol = "test1122";
+    string private _name = "ANGRY PANDA";
+    string private _symbol = "APG";
     uint8 private _decimals = 9;
     
-    uint256 public _taxFee = 5;
+    uint256 public _taxFee = 2;
     uint256 private _previousTaxFee = _taxFee;
     
-    uint256 public _liquidityFee = 5;
+    uint256 public _liquidityFee = 0;
     uint256 private _previousLiquidityFee = _liquidityFee;
 
-    IUniswapV2Router02 public immutable uniswapV2Router;
-    address public immutable uniswapV2Pair;
+    uint256 public _burnFee = 7;
+    uint256 private _previousBurnFee = _burnFee;
+
+    uint256 public _marketingFee = 1;
+    address public marketingWallet = 0x030401CaE4843Fa54987A1d35ED55408047a3372;
+    uint256 private _previousmarketingFee = _marketingFee;
+
+    IUniswapV2Router02 public  uniswapV2Router;
+    address public  uniswapV2Pair;
     
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
-    
-    uint256 public _maxTxAmount = 5000000 * 10**6 * 10**9;
-    uint256 private numTokensSellToAddToLiquidity = 500000 * 10**6 * 10**9;
+
+    uint256 public _maxTxAmount = 1000000000000000000 * 10**9;	
+    uint256 private numTokensSellToAddToLiquidity = 100000000000000000 * 10**9;
     
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
     event SwapAndLiquifyEnabledUpdated(bool enabled);
@@ -730,9 +743,12 @@ contract test1122 is Context, IERC20, Ownable {
     }
     
     constructor () public {
+        //0x10ED43C718714eb63d5aA57B78B54704E256024E
+        //MAIN NET 
+        //PCS  ROUTER 
         _rOwned[_msgSender()] = _rTotal;
         
-        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+        
          // Create a uniswap pair for this new token
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
@@ -833,7 +849,7 @@ contract test1122 is Context, IERC20, Ownable {
     }
 
     function excludeFromReward(address account) public onlyOwner() {
-        // require(account != 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D, 'We can not exclude Uniswap router.');
+        //require(account != 0xc659Fa93F841a424C099420E83CB2dA3E7C38b7E, 'We can not exclude Pancake router.');
         require(!_isExcluded[account], "Account is already excluded");
         if(_rOwned[account] > 0) {
             _tOwned[account] = tokenFromReflection(_rOwned[account]);
@@ -854,7 +870,8 @@ contract test1122 is Context, IERC20, Ownable {
             }
         }
     }
-        function _transferBothExcluded(address sender, address recipient, uint256 tAmount) private {
+
+    function _transferBothExcluded(address sender, address recipient, uint256 tAmount) private {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
@@ -865,32 +882,7 @@ contract test1122 is Context, IERC20, Ownable {
         emit Transfer(sender, recipient, tTransferAmount);
     }
     
-        function excludeFromFee(address account) public onlyOwner {
-        _isExcludedFromFee[account] = true;
-    }
-    
-    function includeInFee(address account) public onlyOwner {
-        _isExcludedFromFee[account] = false;
-    }
-    
-    function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
-        _taxFee = taxFee;
-    }
-    
-    function setLiquidityFeePercent(uint256 liquidityFee) external onlyOwner() {
-        _liquidityFee = liquidityFee;
-    }
-   
-    function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
-        _maxTxAmount = _tTotal.mul(maxTxPercent).div(
-            10**2
-        );
-    }
 
-    function setSwapAndLiquifyEnabled(bool _enabled) public onlyOwner {
-        swapAndLiquifyEnabled = _enabled;
-        emit SwapAndLiquifyEnabledUpdated(_enabled);
-    }
     
      //to recieve ETH from uniswapV2Router when swaping
     receive() external payable {}
@@ -959,18 +951,17 @@ contract test1122 is Context, IERC20, Ownable {
     }
     
     function removeAllFee() private {
-        if(_taxFee == 0 && _liquidityFee == 0) return;
-        
-        _previousTaxFee = _taxFee;
-        _previousLiquidityFee = _liquidityFee;
-        
         _taxFee = 0;
         _liquidityFee = 0;
+        _burnFee = 0;
+        _marketingFee = 0;
     }
     
     function restoreAllFee() private {
-        _taxFee = _previousTaxFee;
-        _liquidityFee = _previousLiquidityFee;
+        _taxFee = 3;
+        _liquidityFee = 2;
+        _burnFee = 0;
+        _marketingFee = 5;
     }
     
     function isExcludedFromFee(address account) public view returns(bool) {
@@ -993,20 +984,12 @@ contract test1122 is Context, IERC20, Ownable {
         require(from != address(0), "ERC20: transfer from the zero address");
         require(to != address(0), "ERC20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
-        if(from != owner() && to != owner())
-            require(amount <= _maxTxAmount, "Transfer amount exceeds the maxTxAmount.");
 
         // is the token balance of this contract address over the min number of
         // tokens that we need to initiate a swap + liquidity lock?
         // also, don't get caught in a circular liquidity event.
         // also, don't swap & liquify if sender is uniswap pair.
-        uint256 contractTokenBalance = balanceOf(address(this));
-        
-        if(contractTokenBalance >= _maxTxAmount)
-        {
-            contractTokenBalance = _maxTxAmount;
-        }
-        
+        uint256 contractTokenBalance = balanceOf(address(this));        
         bool overMinTokenBalance = contractTokenBalance >= numTokensSellToAddToLiquidity;
         if (
             overMinTokenBalance &&
@@ -1019,16 +1002,8 @@ contract test1122 is Context, IERC20, Ownable {
             swapAndLiquify(contractTokenBalance);
         }
         
-        //indicates if fee should be deducted from transfer
-        bool takeFee = true;
-        
-        //if any account belongs to _isExcludedFromFee account then remove the fee
-        if(_isExcludedFromFee[from] || _isExcludedFromFee[to]){
-            takeFee = false;
-        }
-        
         //transfer amount, it will take tax, burn, liquidity fee
-        _tokenTransfer(from,to,amount,takeFee);
+        _tokenTransfer(from,to,amount);
     }
 
     function swapAndLiquify(uint256 contractTokenBalance) private lockTheSwap {
@@ -1088,23 +1063,47 @@ contract test1122 is Context, IERC20, Ownable {
     }
 
     //this method is responsible for taking all fee, if takeFee is true
-    function _tokenTransfer(address sender, address recipient, uint256 amount,bool takeFee) private {
-        if(!takeFee)
+    function _tokenTransfer(address sender, address recipient, uint256 amount) private {
+        if(_isExcludedFromFee[sender] || _isExcludedFromFee[recipient]){
             removeAllFee();
-        
-        if (_isExcluded[sender] && !_isExcluded[recipient]) {
-            _transferFromExcluded(sender, recipient, amount);
-        } else if (!_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferToExcluded(sender, recipient, amount);
-        } else if (!_isExcluded[sender] && !_isExcluded[recipient]) {
-            _transferStandard(sender, recipient, amount);
-        } else if (_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferBothExcluded(sender, recipient, amount);
-        } else {
-            _transferStandard(sender, recipient, amount);
+        }
+        else{
+            require(amount <= _maxTxAmount, "Transfer amount exceeds the maxTxAmount.");
         }
         
-        if(!takeFee)
+        //Calculate burn amount and marketing amount
+        uint256 burnAmt = amount.mul(_burnFee).div(100);
+        uint256 marketingAmt = amount.mul(_marketingFee).div(100);
+
+        if (_isExcluded[sender] && !_isExcluded[recipient]) {
+            _transferFromExcluded(sender, recipient, (amount.sub(burnAmt).sub(marketingAmt)));
+        } else if (!_isExcluded[sender] && _isExcluded[recipient]) {
+            _transferToExcluded(sender, recipient, (amount.sub(burnAmt).sub(marketingAmt)));
+        } else if (!_isExcluded[sender] && !_isExcluded[recipient]) {
+            _transferStandard(sender, recipient, (amount.sub(burnAmt).sub(marketingAmt)));
+        } else if (_isExcluded[sender] && _isExcluded[recipient]) {
+            _transferBothExcluded(sender, recipient, (amount.sub(burnAmt).sub(marketingAmt)));
+        } else {
+            _transferStandard(sender, recipient, (amount.sub(burnAmt).sub(marketingAmt)));
+        }
+        
+        //Temporarily remove fees to transfer to burn address and marketing wallet
+        _taxFee = 0;
+        _liquidityFee = 0;
+
+        //If burnAddress has >= 7 Billion (total supply <= 1 Billion)
+        //don't take burnFee
+        if(balanceOf(address(0)) < 1000000000000000000 * 10**9){
+            _transferStandard(sender, address(0), burnAmt);
+        } 
+        _transferStandard(sender, marketingWallet, marketingAmt);
+
+        //Restore tax and liquidity fees
+        _taxFee = _previousTaxFee;
+        _liquidityFee = _previousLiquidityFee;
+
+
+        if(_isExcludedFromFee[sender] || _isExcludedFromFee[recipient])
             restoreAllFee();
     }
 
@@ -1137,7 +1136,63 @@ contract test1122 is Context, IERC20, Ownable {
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
-
+    function excludeFromFee(address account) public onlyOwner {
+        _isExcludedFromFee[account] = true;
+    }
     
+    function includeInFee(address account) public onlyOwner {
+        _isExcludedFromFee[account] = false;
+    }
+    
+    //Call this function after finalizing the presale
+    function enableAllFees() external onlyOwner() {
+        _taxFee = 2;
+        _previousTaxFee = _taxFee;
+        _liquidityFee = 0;
+        _previousLiquidityFee = _liquidityFee;
+        _burnFee = 7;
+        _previousBurnFee = _taxFee; 
+        _marketingFee = 1;
+        _previousmarketingFee = _marketingFee;
+        inSwapAndLiquify = true;
+        emit SwapAndLiquifyEnabledUpdated(true);
+    }
 
+    function disableAllFees() external onlyOwner() {
+        _taxFee = 0;
+        _previousTaxFee = _taxFee;
+        _liquidityFee = 0;
+        _previousLiquidityFee = _liquidityFee;
+        _burnFee = 0;
+        _previousBurnFee = _taxFee;
+        _marketingFee = 0;
+        _previousmarketingFee = _marketingFee;
+        inSwapAndLiquify = false;
+        emit SwapAndLiquifyEnabledUpdated(false);
+    }
+    
+    function setmarketingWallet(address newWallet) external onlyOwner() {
+        marketingWallet = newWallet;
+    }
+    
+    //New Pancakeswap router version?
+    //No problem, just change it!
+    function setRouterAddress(address newRouter) public onlyOwner() {
+        IUniswapV2Router02 _newPancakeRouter = IUniswapV2Router02(newRouter);
+        uniswapV2Pair = IUniswapV2Factory(_newPancakeRouter.factory()).createPair(address(this), _newPancakeRouter.WETH());
+        uniswapV2Router = _newPancakeRouter;
+    }
+   
+    function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
+        require(maxTxPercent > 10, "Cannot set transaction amount less than 10 percent!");
+        _maxTxAmount = _tTotal.mul(maxTxPercent).div(
+            10**2
+        );
+    }
+
+    function setSwapAndLiquifyEnabled(bool _enabled) public onlyOwner {
+        swapAndLiquifyEnabled = _enabled;
+        emit SwapAndLiquifyEnabledUpdated(_enabled);
+    }
+    
 }
